@@ -7,6 +7,9 @@ import CreateAccount from './Components/createAccount';
 import MainPage from './Components/mainPage';
 import ProtectedRoute from './Components/protectedRoute';
 import ProfilePage from './Components/profilePage';
+import RouteSelection from './Components/routeSelection';
+import DomesticRoute from './Components/domesticRoute';
+import InternationalRoute from './Components/internationalRoute';
 
 function App() {
   return <>
@@ -16,6 +19,9 @@ function App() {
     <Route path='/createAccount' element={<GoogleOAuthProvider clientId='1060507592574-4rd8f30c3s68qe277a15ic82g736sgur.apps.googleusercontent.com'><CreateAccount/></GoogleOAuthProvider>}/>
     <Route path='/mainPage' element={<ProtectedRoute><MainPage/></ProtectedRoute>}/>
     <Route path='/profilePage' element={<ProtectedRoute><ProfilePage/></ProtectedRoute>}/>
+    <Route path='/routeSelection' element={<ProtectedRoute><RouteSelection/></ProtectedRoute>}/>
+    <Route path='/domesticRoute' element={<ProtectedRoute><DomesticRoute/></ProtectedRoute>}/>
+    <Route path='/internationalRoute' element={<ProtectedRoute><InternationalRoute/></ProtectedRoute>}/>
   </Routes>
   </BrowserRouter>
   </>

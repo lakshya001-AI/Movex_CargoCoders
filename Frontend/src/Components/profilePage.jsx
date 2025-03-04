@@ -46,10 +46,16 @@ function ProfilePage() {
           </div>
 
           <div className={Style.linkNavBarMainPage}>
-            <Link className={Style.linkElementNavBar} to="/mainPage">
-              Home
-            </Link>
-          </div>
+                       <Link className={Style.linkElementNavBar} to="/mainPage">
+                         Home
+                       </Link>
+                       <Link className={Style.linkElementNavBar} to="/mainPage">
+                         Features
+                       </Link>
+                       <Link className={Style.linkElementNavBar} to="/mainPage">
+                       Contact Us
+                       </Link>
+                     </div>
 
           <div className={Style.ProfileBtnNavBarMainPage}>
             <Link className={Style.profileBtn} to="/profilePage">
