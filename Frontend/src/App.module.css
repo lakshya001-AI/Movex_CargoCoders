@@ -1,0 +1,1245 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+
+html, body{
+    width: 100%;
+    height: 100%;
+    background-color: rgb(23, 23, 23);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 7px; /* Width of the scrollbar */
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1); /* Track background */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(to right, #4776E6 0%, #8E54E9 100%); /* Gradient color */
+    border-radius: 10px; /* Rounded corners */
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to right, #4e89ff 0%, #a066f5 100%); /* Brighter gradient on hover */
+  }
+
+/* login Page CSS */
+
+.mainDiv{
+    width: 100vw;
+    height: 100vh;
+}
+
+.loginDivMain{
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.959);
+}
+
+.NavBarLoginDiv{
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    padding: 20px;
+}
+
+.NavBarLoginDiv h1{
+    font-size: 29px;
+}
+
+.createAccountLink{
+    text-decoration: none;
+    background: linear-gradient(to right, #4776E6 0%, #8E54E9  51%, #4776E6  100%);
+    margin: 10px;
+    padding: 12px 40px;
+    text-align: center;
+    text-transform: uppercase;
+    background-size: 200% auto;
+    color: white;            
+    border-radius: 30px;
+    display: block;
+}
+
+.createAccountLink:hover{
+    background-position: right center;
+}
+
+.loginDiv1{
+    width: 100%;
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginContentDiv {
+    width: 30vw;
+    height: 70vh;
+    background-color: rgba(255, 255, 255, 0); /* Fully transparent background */
+    backdrop-filter: blur(10px); /* Creates the frosted glass effect with blur */
+    border-radius: 30px; /* Optional: Adds rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Optional: Adds a subtle shadow */
+    border: 1px solid rgba(255, 255, 255, 0.411); /* Optional: Adds a faint border to enhance the glass effect */
+    padding: 30px; /* Optional: Adds padding inside the div */
+    color: white;
+}  
+
+.loginContentDiv1 {
+    width: 30vw;
+    height: 80vh;
+    background-color: rgba(255, 255, 255, 0); /* Fully transparent background */
+    backdrop-filter: blur(10px); /* Creates the frosted glass effect with blur */
+    border-radius: 30px; /* Optional: Adds rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Optional: Adds a subtle shadow */
+    border: 1px solid rgba(255, 255, 255, 0.411); /* Optional: Adds a faint border to enhance the glass effect */
+    padding: 30px; /* Optional: Adds padding inside the div */
+    color: white;
+}  
+
+
+.loginContentDivHeading{
+    font-size: 37px;
+}
+.loginContentDivPara{
+    margin-top: 5px;
+    font-size: 15px;
+    color: rgb(181, 181, 181);
+}
+
+.InputContentDiv{
+    margin-top: 40px;
+}
+
+.emailInput{
+    width: 100%;
+    height: 7vh;
+    padding: 10px;
+    font-size: 18px;
+    background-color: transparent;
+    border: solid 1px rgba(255, 255, 255, 0.411);
+    border-radius: 10px;
+    margin-top: 3px;
+    color: white;
+}
+
+.paraInput{
+    margin-left: 3px;
+    font-size: 18px;
+}
+
+.InputContentDiv1{
+    margin-top: 20px;
+}
+
+.loginBtnDiv{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.loginBtn {
+    width: 100%;
+    background: linear-gradient(to right, #4776E6 0%, #8E54E9 51%, #4776E6 100%);
+    margin: 10px;
+    padding: 12px 40px;
+    text-align: center;
+    text-transform: uppercase;
+    background-size: 200% auto;
+    color: white;
+    border-radius: 30px;
+    display: block;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+
+.loginBtn:hover {
+    background-position: right center; /* Slide the gradient */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+    transform: translateY(-3px); /* Lift the button slightly */
+}
+
+.orParaDiv{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.googleSignINDiv{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.googleSignINDiv1{
+    width: 90%;
+}
+
+.InputContentDivName{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.InputContentDivEmail{
+    margin-right: 10px;
+}
+
+.customToast{
+    color: white !important;
+    background: linear-gradient(to right, #4776E6 0%, #8E54E9 51%, #4776E6 100%) !important;
+    
+}
+
+
+/* main Page CSS */
+
+.mainPageMainDiv{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.959);
+    overflow-y: auto;
+}
+
+.navBarMainPage{
+    width: 100%;
+    height: fit-content;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+    background-color: rgb(18, 18, 18);
+}
+
+.logoNavBarMainPage h1{
+    font-size: 28px;
+}
+
+.linkNavBarMainPage{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.linkElementNavBar{
+    text-decoration: none;
+    margin: 20px;
+    color: rgb(181, 181, 181);
+    font-size: 17px;
+}
+
+.linkElementNavBar:hover{
+    color: white;
+}
+
+.ProfileBtnNavBarMainPage{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.profileBtn{
+    background: linear-gradient(to right, #4776E6 0%, #8E54E9  51%, #4776E6  100%);
+    margin: 10px;
+    padding: 6px 40px;
+    text-align: center;
+    text-transform: uppercase;
+    background-size: 200% auto;
+    color: white;            
+    border-radius: 30px;
+    display: block;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.profileBtn:hover{
+    background-position: right center;
+}
+
+
+.userInfoDiv {
+    position: absolute;
+    top: 70px; /* Adjust based on the Profile button's position */
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0); /* Fully transparent background */
+    backdrop-filter: blur(10px); /* Creates the frosted glass effect with blur */
+    border-radius: 30px; /* Optional: Adds rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Optional: Adds a subtle shadow */
+    border: 1px solid rgba(255, 255, 255, 0.411); /* Optional: Adds a faint border to enhance the glass effect */
+    padding: 20px 30px; /* Optional: Adds padding inside the div */
+    z-index: 1000;
+    color: white;
+}
+
+.logoutBtn {
+  width: 70%;
+    background: linear-gradient(to right, #4776E6 0%, #8E54E9  51%, #4776E6  100%);
+    padding: 15px 20px;
+    text-align: center;
+    background-size: 200% auto;
+    color: white;            
+    border-radius: 10px;
+    display: block;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    margin-right: 20px;
+}
+
+.logoutBtn:hover {
+    background-position: right center;
+}
+
+.userInfoDivPara1{
+    font-size: 21px;
+    font-weight: 600;
+}
+
+.userInfoDivPara2{
+    color: rgb(181, 181, 181);
+}
+
+
+.section1MainPage{
+    width: 100%;
+    height: 86vh;
+    background-image: url("https://img.freepik.com/free-photo/person-report-consulting-account-people-table_1418-76.jpg?t=st=1738393929~exp=1738397529~hmac=436cc8a5c1eaa6f8310c9b106eec0804591e39fcd7bb24cee4929a14a478b52e&w=1060");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+}
+
+.section1MainPageOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* 50% opacity */
+    padding: 20px 40px;
+}
+
+.section1MainPageOverlay h1{
+    color: white;
+    font-size: 72px;
+    width: 37%;
+    margin-top: 30px;
+}
+
+.section1MainPageOverlay p{
+    color: rgb(199, 199, 199);
+    width: 38%;
+    margin-top: 30px;
+    font-size: 19px;
+}
+
+.btnDivSection1MainPageOverlay{
+    margin-top: 50px;
+}
+
+.gettingStartedBtn{
+    width: 9vmax;
+    background: linear-gradient(to right, #4776E6 0%, #8E54E9  51%, #4776E6  100%);
+    margin: 10px;
+    padding: 10px 30px;
+    text-align: center;
+    text-transform: uppercase;
+    background-size: 200% auto;
+    color: white;            
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+.gettingStartedBtn:hover{
+    background-position: right center;
+}
+
+.learnMoreBtn{
+    padding: 10px 30px;
+    font-size: 15px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.gradientText{
+    background: linear-gradient(to right, #4776E6 0%, #8E54E9 51%, #4776E6 100%);
+    -webkit-background-clip: text;
+    background-clip: none;
+    color: transparent;
+}
+
+.gradientText1{
+    background: linear-gradient(to right, #4776E6 0%, #8E54E9 51%, #4776E6 100%);
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-left: 7px;
+    background-clip: none;
+}
+
+.section2MainPage {
+    width: 100%;
+    color: white;
+    padding: 50px 40px;
+    position: relative;
+    background-color: rgb(23, 23, 23);
+    height: 85vh;
+}
+
+/* Heading */
+.section2MainPageHeading {
+    font-size: 2.9rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 50px;
+}
+
+/* Paragraph */
+.section2MainPagePara {
+    font-size: 1.2rem;
+    width: 70%;
+    margin-bottom: 40px;
+    color: rgb(199, 199, 199);
+}
+
+/* Feature section */
+.featureDiv {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* Individual feature */
+.feature {
+    flex: 1 1 30%;
+    padding: 30px;
+    background: linear-gradient(to right, #4776E6 0%, #8E54E9 51%, #4776E6 100%);
+    background-size: 200% 200%;
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: gradient-animation 3s ease infinite;
+    transition: transform 0.3s ease;
+    height: 15vmax;
+}
+
+/* Feature hover effect */
+.feature:hover {
+    transform: translateY(-10px);
+}
+
+/* Gradient animation for features */
+@keyframes gradient-animation {
+    0% {
+        background-position: 200% 0;
+    }
+    50% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Heading inside feature */
+.feature h1 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+
+/* Paragraph inside feature */
+.feature p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    color: rgb(240, 240, 240);
+}
+
+/* Link inside feature */
+.feature a {
+    color: rgb(42, 42, 42);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.borderDiv{
+    height: 35px;
+    width: 4px;
+    background: linear-gradient(to right, #4776E6 0%, #8E54E9 51%, #4776E6 100%);
+    margin-right: 10px;
+    border-radius: 20px;
+}
+
+.section3MainPage{
+    width: 100%;
+    background-image: url("https://img.freepik.com/free-photo/close-up-businessman-with-digital-tablet_1098-549.jpg?t=st=1738401999~exp=1738405599~hmac=d2bd5d7fabd5275a4f01effac3227741e17f17867ca07ff91fec38ecd083a78f&w=740");
+    height: 20vmax;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.section3MainPageOverlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* 50% opacity */
+    padding: 20px 40px;
+    color: white;
+}
+
+.section3MainPageHeading{
+    font-size: 2.9rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.learnMoreBtn1{
+    padding: 10px 30px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.section3MainPagePara{
+    font-size: 1.2rem;
+    width: 80%;
+    margin-bottom: 30px;
+    color: rgb(199, 199, 199);
+}
+
+
+.footerSection{
+    background-color: rgb(23, 23, 23);
+    color: white;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.section4MainPage{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: white;
+    background-color: rgb(23, 23, 23);
+}
+
+.step{
+    width: 35vmax;
+    flex: 1 1 30%;
+    padding: 20px;
+    background: linear-gradient(to right, #4776E6 0%, #8E54E9 51%, #4776E6 100%);
+    background-size: 200% 200%;
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: gradient-animation 3s ease infinite;
+    transition: transform 0.3s ease;
+    margin-bottom: 25px;
+}
+
+.stepNumberAndHeadingDiv{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.stepNumberPara{
+    padding: 6px;
+    background-color: white;
+    border-radius: 100px;
+    color: black;
+    width: 2.5vmax;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.stepHeading{
+    margin-left: 10px;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.stepExplanationPara{
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.section4MainPageDiv1{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    padding: 30px 40px;
+    margin-top: 90px;
+    margin-bottom: 90px;
+}
+
+.section4MainPageDiv2{
+    display: flex;
+    flex-direction: column;
+    padding: 30px 40px;
+    margin-top: 90px;
+    margin-bottom: 90px;
+}
+
+
+.section4MainPageHeading{
+    font-size: 70px;
+    margin-top: 30px;
+}
+
+.section4MainPagePara{
+    width: 50vmax;
+    font-size: 21px;
+    margin-top: 30px;
+    color: rgb(181, 181, 181);
+}
+
+/* Bias Prediction CSS */
+
+.biasPredictionMainDiv {
+    width: 100%;
+    height: 89.5vh;
+    background-color: rgb(18, 18, 18);
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: white;
+}
+
+
+
+/* Gradient for the first div */
+.biasPredictionMainDiv1 {
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(to right, #4776E6 0%, #8E54E9 51%, #4776E6 100%);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-right: 20px;
+}
+
+/* Second Div Styling */
+.biasPredictionMainDiv2 {
+    width: 70%;
+    background-color: #1f1f1f;
+    border-radius: 15px;
+    padding: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+}
+
+
+.biasPredictionMainDiv1Heading{
+    font-size: 69px;
+}
+
+.biasPredictionMainDiv1Para{
+    margin-top: 10px;
+    font-size: 18px;
+    color: rgb(240, 240, 240);
+    font-style: oblique;
+}
+
+.BiasDetectionStepsDiv{
+    display: flex;
+    flex-direction: column;
+    margin-top: 4%;
+}
+
+
+.BiasDetectionStepDiv{
+    margin-top: 15px;
+}
+
+
+
+
+
+/* Form Styling */
+.biasPredictionMainDiv2 form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-top: 30px;
+}
+
+.biasPredictionMainDiv2 input[type="file"] {
+    width: 70%;
+    background-color: #1a1a1a;
+    color: white;
+    padding: 20px;
+    border: 1px solid #4776E6;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 17px;
+    border-radius: 10px;
+}
+.deploymentLinkInput{
+  width: 70%;
+    background-color: #1a1a1a;
+    color: white;
+    padding: 20px;
+    border: 1px solid #4776E6;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 17px;
+    border-radius: 10px;
+}
+.biasPredictionMainDiv2 button {
+    background: linear-gradient(to right, #4776E6 0%, #8E54E9 51%, #4776E6 100%);
+    color: white;
+    padding: 15px 80px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s;
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+.biasPredictionMainDiv2 button:hover {
+    transform: scale(1.05);
+}
+
+/* Results Styling */
+.biasPredictionMainDiv2 h2, .biasPredictionMainDiv2 h3 {
+    margin-bottom: 10px;
+    text-align: center;
+    color: #8E54E9;
+}
+
+.biasPredictionMainDiv2 p, .biasPredictionMainDiv2 pre {
+    margin-left: 10px;
+    margin-bottom: 10px;
+    color: #ddd;
+}
+
+/* Error Message */
+.biasPredictionMainDiv2 p[style*="color: red"] {
+    font-weight: bold;
+}
+
+.resultsContainer {
+    padding: 10px;
+    border-radius: 15px;
+    margin-top: 50px;
+  }
+  
+  .resultsContainer h2, .resultsContainer h3 {
+    color: #8E54E9;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 29px;
+  }
+  
+  .resultsContainer p, .resultsContainer ul {
+    font-size: 19px;
+    color: #ddd;
+  }
+  
+  .resultsContainer ul {
+    margin-left: 30px;
+    margin-top: 20px;
+  }
+  
+  .resultsContainer ul li {
+    margin-bottom: 10px;
+    list-style: disc;
+  }
+  
+  .resultsContainer .conclusion h3 {
+    margin-top: 10px;
+    text-align: left;
+    margin-left: 10px;
+    font-size: 20px;
+    color: white;
+  }
+
+  .resultsContainer .conclusion h4 {
+    margin-top: 10px;
+    text-align: left;
+    margin-left: 10px;
+    font-size: 17px;
+    color: white;
+  }
+  
+  .resultsContainer .conclusion p {
+    font-size: 20px;
+    color: #eee;
+  }
+  
+  .resultsContainer .conclusion ul {
+    margin-top: 20px;
+    font-size: 15px;
+  }
+
+  .overAllModelAccuracyPara{
+    width: 100%;
+  }
+
+
+  .overAllModelAccuracyPara strong{
+    font-size: 28px;
+  }
+
+  .overAllModelAccuracyPara span{
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+
+  .loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 20px;
+    color: #8E54E9;
+  }
+  
+  .loadingContainer p {
+    font-weight: bold;
+  }
+
+
+  .loanApprovalMainDiv{
+    width: 100%;
+    height: 89.5vh;
+    background-color: rgb(18, 18, 18);
+    padding: 30px;
+    color: white;
+  }
+
+  .loanApprovalMainDivInnerDiv{
+    width: 100%;
+    height: 100%;
+    background-color: #1f1f1f;
+    border-radius: 40px;
+    padding: 20px;
+  }
+
+  .loanApprovalHeading{
+    font-size: 54px;
+    margin-left: 20px;
+    margin-top: 50px;
+  }
+
+  .loanApprovalPara{
+    font-size: 21px;
+    margin-left: 20px;
+  }
+
+  .loanApprovalStepsDiv{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 20px;
+    margin-top: 50px;
+  }
+
+  .loanApprovalStep{
+    width: 32%;
+    padding: 20px;
+    background: linear-gradient(to right, #4776E6 0%, #8E54E9 51%, #4776E6 100%);
+    background-size: 200% 200%;
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: gradient-animation 3s ease infinite;
+    transition: transform 0.3s ease;
+    margin-bottom: 25px;
+    height: 13vmax;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .loanStepExplanationPara{
+    margin-top: 20px;
+    font-size: 19px;
+  }
+
+  .loanStepHeading{
+    font-size: 28px;
+    font-weight: bold;
+    margin-left: 10px;
+  }
+
+  .getPredictionBtnDiv{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+  }
+
+  .getPredictionBtnDiv button {
+    padding: 20px 70px;
+    font-size: 17px;
+    background-color: transparent;
+    border: solid 2px white;
+    color: white;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .getPredictionBtnDiv button:hover {
+    color: white;
+    box-shadow: 0 10px 15px rgba(71, 118, 230, 0.5);
+  }
+
+  /* Overlay Styles */
+.overlayPopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999; /* Ensure the popup is on top of other content */
+    opacity: 0;
+    animation: fadeIn 0.3s forwards;
+  }
+  
+  /* Popup Content Styles */
+  .popupContent {
+    background-color: whitesmoke;
+    border-radius: 8px;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    height: 80%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.3s ease-out;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+  }
+  
+  .popupContent h2,
+  .popupContent h3 {
+    color: #333;
+    font-size: 1.7rem;
+    margin-bottom: 20px;
+  }
+  
+  .popupContent ul {
+    padding-left: 5px;
+  }
+  
+  .popupContent ul li {
+    padding: 5px;
+    font-size: 1rem;
+    color: #000000;
+  }
+  
+  
+
+  /* Animations */
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideIn {
+    0% {
+      transform: translateY(-50px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  .formGroup{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .formGroup label{
+    font-size: 17px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+
+  .formGroup input{
+    padding: 5px 5px;
+    font-size: 15px;
+    margin-bottom: 5px;
+  }
+
+  .btnDiv{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+  }
+
+  .btnDiv button{
+    width: 10vmax;
+    margin: 5px;
+    padding: 10px;
+  }
+
+  .predictBtn{
+    background: linear-gradient(to right, #4776E6 0%, #8E54E9  51%, #4776E6  100%);
+    text-align: center;
+    text-transform: uppercase;
+    background-size: 200% auto;
+    color: white;            
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+  }
+
+  .closeButton{
+    background: #3f3f3f;
+    color: white;
+    border: 0;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  
+
+  .predictionPara{
+    font-size: 18px;
+    margin:15px;
+    font-style: italic
+  }
+
+  .section{
+    margin-bottom: 10px;
+  }
+
+  .financialAdviceMainDiv{
+    width: 100%;
+    height: 89.5vh;
+    background-color: rgb(18, 18, 18);
+    padding: 20px;
+    color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+}
+
+.financialAdviceMainDiv h1{
+    font-size: 48px;
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+.financialAdviceMainDiv p{
+    font-size: 18px;
+    margin-top: 5px;
+    margin-left: 30px;
+}
+
+  .financialAdviceBtnDivs{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 30px;
+    margin-top: 30px;
+  }
+
+  .financialAdviceBtnDivs input{
+    width: 18vmax;
+    padding: 15px;
+    font-size: 17px;
+    background-color: transparent;
+    border: solid rgb(185, 184, 184) 2px;
+    border-radius: 30px;
+    color: white;
+  }
+
+  .dropdown{
+    width: 18vmax;
+    padding: 15px;
+    font-size: 17px;
+    background-color: transparent;
+    border: solid rgb(185, 184, 184) 2px;
+    border-radius: 30px;
+    color: white;
+  }
+
+  .dropdown option{
+    color: black;
+    background: transparent;
+  }
+
+  .financialAdviceBtnDivs button{
+    width: 20vmax;
+    padding: 18px 0px;
+    background: linear-gradient(to right, #4776E6 0%, #8E54E9  51%, #4776E6  100%);
+    text-align: center;
+    text-transform: uppercase;
+    background-size: 200% auto;
+    color: white;            
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    border-radius: 50px;
+  }
+
+  .financialAdviceMainDiv2{
+    width: 100%;
+    background-color: #1f1f1f;
+    height: 52vh;
+    border-radius: 40px;
+    margin-top: 30px;
+    overflow-y: auto;
+  }
+
+  .modelLinkInput{
+    width: 70%;
+    background-color: #1a1a1a;
+    color: white;
+    padding: 20px;
+    border: 1px solid #4776E6;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 17px;
+    border-radius: 10px;
+  }
+
+  .profilePageInnerDiv1{
+    width: 100%;
+    height: 20%;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .profilePageInnerDiv11{
+    width: 80%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+
+  .profilePageInnerDiv11 h1{
+    margin-left: 10px;
+    font-size: 45px;
+  }
+
+  
+  .profilePageInnerDiv11 p{
+    margin-left: 10px;
+    font-size: 18px;
+  }
+
+  .profilePageInnerDiv12{
+    width: 20%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+  }
+
+  .profilePageInnerDiv2{
+    width: 100%;
+    height: 80%;
+    overflow-y: auto;
+  }
+
+  .adviceCard{
+    padding: 10px;
+    background-color: #333;
+    margin: 10px;
+    border-radius: 20px;
+    padding: 20px;
+  }
+
+  .adviceCard ul{
+    margin-left: 20px; 
+  }
+
+  .conclusionSection{
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+
+  .groupAnalysisList{
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .groupAnalysisItem{
+    list-style: none;
+  }
+
+  .mitigationAdvicePara{
+    text-align: center;
+  }
+
+  
