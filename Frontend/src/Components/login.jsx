@@ -110,8 +110,8 @@ const loginUser = async () => {
           </div>
           <div className={Style.loginDiv1}>
             <div className={Style.loginContentDiv}>
-              <h1 className={Style.loginContentDivHeading}>Sign in to Finex</h1>
-              <p className={Style.loginContentDivPara}>Your Go-To Platform for Secure Financial Insights and Personalized Solutions.</p>
+              <h1 className={Style.loginContentDivHeading}>Sign in to Movex</h1>
+              <p className={Style.loginContentDivPara}>Your Go-To Platform for moving your cargo effortlessly across borders.</p>
               <div className={Style.InputContentDiv}>
                 <p className={Style.paraInput}>Email</p>
                 <input type="text" placeholder='Your email address' className={Style.emailInput} value={emailAddress} onChange={(e)=>{

@@ -100,7 +100,7 @@ function CreateAccount() {
           <div className={Style.loginDiv1}>
             <div className={Style.loginContentDiv1}>
               <h1 className={Style.loginContentDivHeading}>Create your account</h1>
-              <p className={Style.loginContentDivPara}>Unleashing the Power of AI for Your Financial Success & Journey.</p>
+              <p className={Style.loginContentDivPara}>Harnessing the Transformative Power of AI to Revolutionize Cargo Shipping and Optimize Route.</p>
               <div className={Style.InputContentDiv3}>
                 <div className={Style.InputContentDivName}>
                 <div className={Style.InputContentDivEmail}>
