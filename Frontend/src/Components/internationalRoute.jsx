@@ -88,22 +88,29 @@ function InternationalRoute() {
     <>
       <div className={Style.mainDiv}>
         {/* Navigation Bar */}
-        <div className={Style.navBarMainPage}>
-          <div className={Style.logoNavBarMainPage}>
-            <h1>MOVEX</h1>
-          </div>
-          <div className={Style.linkNavBarMainPage}>
-            <Link className={Style.linkElementNavBar} to="/mainPage">
-              Home
-            </Link>
-            <Link className={Style.linkElementNavBar} to="/mainPage">
-              Features
-            </Link>
-            <Link className={Style.linkElementNavBar} to="/mainPage">
-              Contact Us
-            </Link>
-          </div>
-        </div>
+         <div className={Style.navBarMainPage}>
+                   <div className={Style.logoNavBarMainPage}>
+                     <h1>MOVEX</h1>
+                   </div>
+       
+                   <div className={Style.linkNavBarMainPage}>
+                     <Link className={Style.linkElementNavBar} to="/mainPage">
+                       Home
+                     </Link>
+                     <Link className={Style.linkElementNavBar} to="/mainPage">
+                       Features
+                     </Link>
+                     <Link className={Style.linkElementNavBar} to="/mainPage">
+                       Contact Us
+                     </Link>
+                   </div>
+       
+                   <div className={Style.ProfileBtnNavBarMainPage}>
+                     <Link className={Style.profileBtn} to="/profilePage">
+                       Profile
+                     </Link>
+                   </div>
+                 </div>
 
         {/* Main Content */}
         <div className={Style.loanApprovalMainDiv}>
