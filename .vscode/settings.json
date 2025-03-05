@@ -1,5 +1,10 @@
 {
     "cSpell.words": [
         "Movex"
-    ]
+    ],
+    "python.testing.pytestArgs": [
+        "complianceCheck"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }

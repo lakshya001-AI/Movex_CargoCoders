@@ -36,9 +36,66 @@ function InternationalRoute() {
                 </Link>
               </div>
             </div>
+            <div className={Style.loanApprovalMainDiv}>
+  <div className={Style.loanApprovalMainDivInnerDiv}>
+    <h1 className={Style.loanApprovalHeading}>
+      International Shipment Made Easy
+    </h1>
+    <p className={Style.loanApprovalPara}>
+      Simplify your international shipping with our advanced platform. We leverage cutting-edge algorithms, cost-efficient models, and time optimization techniques to deliver a seamless and reliable experience for global logistics.
+    </p>
+
+    <div className={Style.loanApprovalStepsDiv}>
+      <div className={Style.loanApprovalStep}>
+        <div className={Style.stepNumberAndHeadingDiv}>
+          <p className={Style.stepNumberPara}>1</p>
+          <p className={Style.loanStepHeading}>
+            Provide Shipment Details
+          </p>
+        </div>
+        <p className={Style.loanStepExplanationPara}>
+          Enter key shipment details, including type of goods, weight, dimensions, pickup location, destination country, and delivery address.
+        </p>
+      </div>
+      <div className={Style.loanApprovalStep}>
+        <div className={Style.stepNumberAndHeadingDiv}>
+          <p className={Style.stepNumberPara}>2</p>
+          <p className={Style.loanStepHeading}>
+            Analyze Shipment Details
+          </p>
+        </div>
+        <p className={Style.loanStepExplanationPara}>
+          Our system validates your information, checks compliance with international trade regulations, and prepares data for optimal routing.
+        </p>
+      </div>
+      <div className={Style.loanApprovalStep}>
+        <div className={Style.stepNumberAndHeadingDiv}>
+          <p className={Style.stepNumberPara}>3</p>
+          <p className={Style.loanStepHeading}>
+            Optimize and Find the Route
+          </p>
+        </div>
+        <p className={Style.loanStepExplanationPara}>
+          Using Dijkstra's algorithm and time optimization models, we identify the most efficient and cost-effective international shipping route.
+        </p>
+      </div>
+    </div>
+
+    <div className={Style.getPredictionBtnDiv}>
+      <button
+        className={Style.checkEligibilityBtn}
+      >
+        Find the Route
+      </button>
+    </div>
+  </div>
+</div>
+
           </div>
         </div>
   </>
 }
 
 export default InternationalRoute;
+
+
