@@ -5,6 +5,7 @@ import pandas as pd # type: ignore
 from sklearn.ensemble import RandomForestClassifier # type: ignore
 from sklearn.model_selection import train_test_split # type: ignore
 from lime.lime_tabular import LimeTabularExplainer # type: ignore
+from flask_cors import CORS
 
 # Step 1: Prepare the Dataset (Updated with 'is_prohibited' feature)
 data = pd.DataFrame({
@@ -43,6 +44,7 @@ explainer = LimeTabularExplainer(
 
 # Step 4: Deploy the Model Using Flask
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -51,6 +53,7 @@ def predict():
 
     # Parse input data
     data = request.json
+    print(data)
     input_data = pd.DataFrame([data])
 
     # Check for prohibited HS codes
