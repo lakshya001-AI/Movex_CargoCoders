@@ -12,6 +12,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const axios = require("axios");
 const { Configuration, PlaidApi, PlaidEnvironments } = require("plaid");
 const { Ollama } = require("ollama");
+const { console } = require("inspector");
 const ollama = new Ollama();
 
 dotenv.config();
@@ -66,6 +67,8 @@ app.post("/loginUser", async (req, res) => {
 
     // Check if user exists
     const user = await userModel.findOne({ emailAddress });
+    console.log(user);
+    
     if (!user) {
       return res.status(401).send({ message: "User not found!" });
     }
@@ -120,7 +123,42 @@ app.get("/protectedRoute", verifyToken, (req, res) => {
   });
 });
 
+// Compliance Check Endpoint
+app.post("/compliance", async (req, res) => {
+  const { origin, destination, hscode, weight, type } = req.body;
+
+  console.log(origin);
+  console.log(destination);
+  
+  
+
+  // Validate input fields
+  if (!origin || !destination || !hscode || !weight || !type) {
+    return res.status(400).json({ error: "All fields are required!" });
+  }
+
+  try {
+    // Send data to the get the compliance check
+    const response = await axios.post("http://127.0.0.1:3000/predict", {
+      origin,
+      destination,
+      hscode,
+      weight,
+      type,
+    });
+
+    const data = response.data;
+
+    // Send response back to the frontend
+    res.status(200).json(data);
+  } catch (error) {
+    console.error("Error connecting to the prediction API:", error.message);
+    res.status(500).json({ error: "Failed to connect to the prediction service." });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
+console.log("Preparing to start the server...");
 app.listen(PORT, () => {
   console.log(`Server is running on Port ${PORT}`);
 });
