@@ -10,6 +10,7 @@ import ProfilePage from './Components/profilePage';
 import RouteSelection from './Components/routeSelection';
 import DomesticRoute from './Components/domesticRoute';
 import InternationalRoute from './Components/internationalRoute';
+import FlavorCloud from './Components/flavourCloud';
 
 function App() {
   return <>
@@ -22,6 +23,7 @@ function App() {
     <Route path='/routeSelection' element={<ProtectedRoute><RouteSelection/></ProtectedRoute>}/>
     <Route path='/domesticRoute' element={<ProtectedRoute><DomesticRoute/></ProtectedRoute>}/>
     <Route path='/internationalRoute' element={<ProtectedRoute><InternationalRoute/></ProtectedRoute>}/>
+    <Route path='/flavourCloud' element={<ProtectedRoute><FlavorCloud/></ProtectedRoute>}/>
   </Routes>
   </BrowserRouter>
   </>
