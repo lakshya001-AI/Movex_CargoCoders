@@ -68,7 +68,7 @@ app.post("/loginUser", async (req, res) => {
 
     // Check if user exists
     const user = await userModel.findOne({ emailAddress });
-    
+
     if (!user) {
       return res.status(401).send({ message: "User not found!" });
     }
@@ -139,7 +139,6 @@ app.get("/protectedRoute", verifyToken, (req, res) => {
 //       });
 //     }
 
-
 //     // Set headers for streaming
 //     res.writeHead(200, {
 //       "Content-Type": "text/event-stream",
@@ -147,7 +146,6 @@ app.get("/protectedRoute", verifyToken, (req, res) => {
 //       Connection: "keep-alive",
 //       "Access-Control-Allow-Origin": "*",
 //     });
-
 
 //     const messages = [{
 //       role: "user",
@@ -215,7 +213,7 @@ app.get("/protectedRoute", verifyToken, (req, res) => {
 //               })}\n\n`
 //             );
 //             console.log(accumulatedContent);
-            
+
 //             accumulatedContent = "";
 //           }
 //         }
@@ -241,7 +239,6 @@ app.get("/protectedRoute", verifyToken, (req, res) => {
 //       res.end();
 //     }
 
-    
 //   } catch (error) {
 //     console.error("Error in financial advice endpoint:", error);
 //     if (!res.headersSent) {
@@ -322,7 +319,7 @@ app.get("/protectedRoute", verifyToken, (req, res) => {
 //               cost: parsedResponse.cost,
 //               time: parsedResponse.time,
 //             })}\n\n`);
-          
+
 //           res.write(
 //             `data: ${JSON.stringify({
 //               bestRoute: parsedResponse.bestRoute,
@@ -364,10 +361,26 @@ app.get("/protectedRoute", verifyToken, (req, res) => {
 
 app.post("/getDomesticRoute", async (req, res) => {
   try {
-    const { origin, destination, mode, weight, hscode, shipmentType, instructions } = req.body;
+    const {
+      origin,
+      destination,
+      mode,
+      weight,
+      hscode,
+      shipmentType,
+      instructions,
+    } = req.body;
 
     // Validate inputs
-    if (!origin || !destination || !mode || !weight || !hscode || !shipmentType || !instructions) {
+    if (
+      !origin ||
+      !destination ||
+      !mode ||
+      !weight ||
+      !hscode ||
+      !shipmentType ||
+      !instructions
+    ) {
       console.log("Missing required fields:", {
         origin,
         destination,
@@ -378,7 +391,8 @@ app.post("/getDomesticRoute", async (req, res) => {
         instructions,
       });
       return res.status(400).json({
-        error: "Please provide all required details including origin, destination, transport mode, weight, shipment type, and instructions.",
+        error:
+          "Please provide all required details including origin, destination, transport mode, weight, shipment type, and instructions.",
       });
     }
 
@@ -421,7 +435,6 @@ app.post("/getDomesticRoute", async (req, res) => {
         }
       }
 
-
       // Extract JSON from AI response
       let parsedResponse;
       try {
@@ -429,12 +442,18 @@ app.post("/getDomesticRoute", async (req, res) => {
         if (jsonMatch) {
           parsedResponse = JSON.parse(jsonMatch[0]);
 
-          if (parsedResponse.bestRoute && parsedResponse.cost && parsedResponse.time) {
-            console.log( `data: ${JSON.stringify({
-              bestRoute: parsedResponse.bestRoute,
-              cost: parsedResponse.cost,
-              time: parsedResponse.time,
-            })}\n\n`);
+          if (
+            parsedResponse.bestRoute &&
+            parsedResponse.cost &&
+            parsedResponse.time
+          ) {
+            console.log(
+              `data: ${JSON.stringify({
+                bestRoute: parsedResponse.bestRoute,
+                cost: parsedResponse.cost,
+                time: parsedResponse.time,
+              })}\n\n`
+            );
             res.write(
               `data: ${JSON.stringify({
                 bestRoute: parsedResponse.bestRoute,
@@ -442,11 +461,13 @@ app.post("/getDomesticRoute", async (req, res) => {
                 time: parsedResponse.time,
               })}\n\n`
             );
-            res.status(200).send(JSON.stringify({
-              bestRoute: parsedResponse.bestRoute,
-              cost: parsedResponse.cost,
-              time: parsedResponse.time,
-            }));
+            res.status(200).send(
+              JSON.stringify({
+                bestRoute: parsedResponse.bestRoute,
+                cost: parsedResponse.cost,
+                time: parsedResponse.time,
+              })
+            );
           } else {
             throw new Error("Incomplete response from AI");
           }
@@ -481,7 +502,6 @@ app.post("/getDomesticRoute", async (req, res) => {
     }
   }
 });
-
 
 // Geocoding function
 async function geocodeAddress(address) {
@@ -669,6 +689,7 @@ app.post("/api/route-proxy", async (req, res) => {
 });
 
 
+
 // Add the geocoding endpoint if it doesn't exist yet
 app.get("/api/geocode", async (req, res) => {
   try {
@@ -696,6 +717,7 @@ app.get("/api/geocode", async (req, res) => {
     res.status(500).json({ error: "Geocoding request failed" });
   }
 });
+
 
 
 const PORT = process.env.PORT || 5000;
