@@ -15,7 +15,7 @@ def calculate_distance(city1, city2):
     #     ("mumbai", "dubai"): 1920
     # }
     distances = {
-    ("mumbai", "chennai"): 1338,
+    ("mumbai", "chennai"): 1251,
     ("chennai", "singapore"): 2920,
     ("dhanbad", "delhi"): 1200,
     ("delhi", "dubai"): 2200,

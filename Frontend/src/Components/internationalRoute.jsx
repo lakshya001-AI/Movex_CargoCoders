@@ -686,29 +686,33 @@ function InternationalRoute() {
       type: formData.type || "perishable",
     };
 
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:3000/predict",
-        formattedData
-      );
-      const result = response.data;
-
-      console.log(response);
-
-      if (result.prediction === 1) {
-        setComplianceResult(result);
-      } else {
-        setComplianceResult(result);
-        setExplanations(
-          Array.isArray(result.explanation) ? result.explanation : []
-        ); // Ensure explanations is an array
-        setErrorMessage(
-          "Compliance check failed. Review the conditions below."
+    if (formData.origin === formData.destination) {
+      alert("Origin and destination cannot be same, Please enter valid inputs");
+    }else{
+      try {
+        const response = await axios.post(
+          "http://127.0.0.1:3000/predict",
+          formattedData
         );
+        const result = response.data;
+  
+        console.log(response);
+  
+        if (result.prediction === 1) {
+          setComplianceResult(result);
+        } else {
+          setComplianceResult(result);
+          setExplanations(
+            Array.isArray(result.explanation) ? result.explanation : []
+          ); // Ensure explanations is an array
+          setErrorMessage(
+            "Compliance check failed. Review the conditions below."
+          );
+        }
+      } catch (error) {
+        console.error("Error during compliance check:", error);
+        setErrorMessage("Error connecting to the ML model server.");
       }
-    } catch (error) {
-      console.error("Error during compliance check:", error);
-      setErrorMessage("Error connecting to the ML model server.");
     }
   };
 
@@ -751,6 +755,7 @@ function InternationalRoute() {
   };
 
   const handleFindRoute = async () => {
+
     try {
       const response = await axios.post(
         "http://127.0.0.1:3001/route",
