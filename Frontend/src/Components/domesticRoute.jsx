@@ -388,20 +388,46 @@ function DomesticRoute() {
                 </div>
               </form>
             ) : (
+              // <div>
+              //   <h2>Route Details</h2>
+              //   <p><strong>Best Route:</strong> {routeDetails.best_route}</p>
+              //   <p><strong>Cost:</strong> ₹{routeDetails.cost}</p>
+              //   <p><strong>Estimated Time:</strong> {routeDetails.time}</p>
+              //   <div className={Style.popupButtons}>
+              //     <button className={Style.submitBtn} onClick={handleSaveResponse}>
+              //       Save Response
+              //     </button>
+              //     <button className={Style.closeBtn} onClick={handleCloseOverlay}>
+              //       Close
+              //     </button>
+              //   </div>
+              // </div>
               <div>
-                <h2>Route Details</h2>
-                <p><strong>Best Route:</strong> {routeDetails.best_route}</p>
-                <p><strong>Cost:</strong> ${routeDetails.cost}</p>
-                <p><strong>Estimated Time:</strong> {routeDetails.time}</p>
-                <div className={Style.popupButtons}>
-                  <button className={Style.submitBtn} onClick={handleSaveResponse}>
-                    Save Response
-                  </button>
-                  <button className={Style.closeBtn} onClick={handleCloseOverlay}>
-                    Close
-                  </button>
-                </div>
-              </div>
+  <h2>Route Details</h2>
+  {routeDetails.best_route && routeDetails.cost && routeDetails.time ? (
+    <>
+      <p><strong>Best Route:</strong> {routeDetails.best_route}</p>
+      <p><strong>Cost:</strong> ₹{routeDetails.cost}</p>
+      <p><strong>Estimated Time:</strong> {routeDetails.time}</p>
+      <div className={Style.popupButtons}>
+        <button className={Style.submitBtn} onClick={handleSaveResponse}>
+          Save Response
+        </button>
+        <button className={Style.closeBtn} onClick={handleCloseOverlay}>
+          Close
+        </button>
+      </div>
+    </>
+  ) : (
+    <div>
+         <p>Data limit: No route is available</p>
+    <button className={Style.closeBtn} onClick={handleCloseOverlay}>
+          Close
+        </button>
+    </div>
+  )}
+</div>
+
             )}
           </div>
         </div>
