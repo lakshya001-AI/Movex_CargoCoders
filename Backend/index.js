@@ -13,6 +13,7 @@ const axios = require("axios");
 const { Configuration, PlaidApi, PlaidEnvironments } = require("plaid");
 const { Ollama } = require("ollama");
 const ollama = new Ollama();
+const path = require("path");
 
 dotenv.config();
 connectMongoDB();
@@ -20,6 +21,7 @@ connectMongoDB();
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, "client/build")));
 
 // JWT Secret Key
 const JWT_SECRET = process.env.JWT_SECRET || "mySuperSecretKey12345!@";
@@ -481,6 +483,219 @@ app.post("/getDomesticRoute", async (req, res) => {
 });
 
 
+// Geocoding function
+async function geocodeAddress(address) {
+  try {
+    const response = await axios.get(
+      "https://maps.googleapis.com/maps/api/geocode/json",
+      {
+        params: {
+          address: address,
+          key: process.env.Google_Map_API,
+        },
+      }
+    );
+
+    if (response.data.status === "OK" && response.data.results.length > 0) {
+      const location = response.data.results[0].geometry.location;
+      return {
+        latitude: location.lat,
+        longitude: location.lng,
+      };
+    } else {
+      throw new Error(`Geocoding failed for address: ${address}`);
+    }
+  } catch (error) {
+    console.error("Geocoding error:", error);
+    throw error;
+  }
+}
+
+// Parse polyline to extract route steps
+function parsePolyline(encodedPolyline) {
+  // This is a simplified implementation
+  // In a real app, you would use a library to decode the polyline and extract meaningful steps
+  return [
+    { instruction: "Start your journey", distance: "Start" },
+    { instruction: "Follow the route", distance: "Continue" },
+    { instruction: "Arrive at your destination", distance: "End" },
+  ];
+}
+
+// New Routes API endpoint
+app.post("/api/directions", async (req, res) => {
+  try {
+    const { origin, destination } = req.body;
+
+    if (!origin || !destination) {
+      return res
+        .status(400)
+        .json({ error: "Origin and destination are required" });
+    }
+
+    // Geocode both addresses to get coordinates
+    const originCoords = await geocodeAddress(origin);
+    const destCoords = await geocodeAddress(destination);
+
+    // Prepare request for Routes API
+    const routesApiUrl =
+      "https://routes.googleapis.com/directions/v2:computeRoutes";
+
+    const requestData = {
+      origin: {
+        location: {
+          latLng: {
+            latitude: originCoords.latitude,
+            longitude: originCoords.longitude,
+          },
+        },
+      },
+      destination: {
+        location: {
+          latLng: {
+            latitude: destCoords.latitude,
+            longitude: destCoords.longitude,
+          },
+        },
+      },
+      travelMode: "DRIVE",
+      routingPreference: "TRAFFIC_AWARE",
+      computeAlternativeRoutes: false,
+      routeModifiers: {
+        avoidTolls: false,
+        avoidHighways: false,
+        avoidFerries: false,
+      },
+      languageCode: "en-US",
+      units: "IMPERIAL",
+    };
+
+    const headers = {
+      "Content-Type": "application/json",
+      "X-Goog-Api-Key": process.env.Google_Map_API,
+      "X-Goog-FieldMask":
+        "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline,routes.legs",
+    };
+
+    console.log("Sending request to Routes API...");
+    const response = await axios.post(routesApiUrl, requestData, { headers });
+
+    // Check if we have a valid response with routes
+    if (
+      !response.data ||
+      !response.data.routes ||
+      response.data.routes.length === 0
+    ) {
+      throw new Error("No routes found");
+    }
+
+    const route = response.data.routes[0];
+
+    // Convert distance from meters to miles or kilometers
+    const distanceInMeters = route.distanceMeters;
+    const distanceInMiles = (distanceInMeters / 1609.34).toFixed(1);
+
+    // Convert duration from seconds to a readable format
+    const durationInSeconds = parseInt(route.duration.replace("s", ""));
+    const hours = Math.floor(durationInSeconds / 3600);
+    const minutes = Math.floor((durationInSeconds % 3600) / 60);
+    const durationStr =
+      hours > 0 ? `${hours} hr ${minutes} min` : `${minutes} min`;
+
+    // Generate steps from the encoded polyline
+    // In a production app, you would want to extract detailed navigation instructions
+    // from the legs.steps data if available
+    const steps =
+      route.legs && route.legs[0].steps
+        ? route.legs[0].steps.map((step) => ({
+            instruction: step.navigationInstruction || "Follow the route",
+            distance: `${(step.distanceMeters / 1609.34).toFixed(1)} mi`,
+          }))
+        : parsePolyline(route.polyline.encodedPolyline);
+
+    // Format the response
+    const directions = {
+      distance: `${distanceInMiles} mi`,
+      duration: durationStr,
+      steps: steps,
+    };
+
+    console.log("Successfully fetched directions");
+    res.json(directions);
+  } catch (error) {
+    console.error("Error fetching directions:", error.message);
+    if (error.response) {
+      console.error("API Response:", error.response.data);
+    }
+    res.status(500).json({ error: "Failed to fetch directions" });
+  }
+});
+
+// Route Proxy API endpoint
+app.post("/api/route-proxy", async (req, res) => {
+  try {
+    const requestData = req.body;
+
+    // Validate request data
+    if (!requestData.origin || !requestData.destination) {
+      return res
+        .status(400)
+        .json({ error: "Origin and destination are required" });
+    }
+
+    // Make request to Google Routes API
+    const routesApiUrl =
+      "https://routes.googleapis.com/directions/v2:computeRoutes";
+
+    const headers = {
+      "Content-Type": "application/json",
+      "X-Goog-Api-Key": process.env.Google_Map_API,
+      "X-Goog-FieldMask":
+        "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline",
+    };
+
+    console.log("Sending request to Routes API via proxy...");
+    const response = await axios.post(routesApiUrl, requestData, { headers });
+
+    // Return the response
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error in route proxy:", error.message);
+    if (error.response) {
+      console.error("API Response:", error.response.data);
+    }
+    res.status(500).json({ error: "Failed to fetch route data" });
+  }
+});
+
+
+// Add the geocoding endpoint if it doesn't exist yet
+app.get("/api/geocode", async (req, res) => {
+  try {
+    const { address } = req.query;
+
+    if (!address) {
+      return res.status(400).json({ error: "Address is required" });
+    }
+
+    console.log(`Geocoding address: ${address}`);
+
+    const response = await axios.get(
+      "https://maps.googleapis.com/maps/api/geocode/json",
+      {
+        params: {
+          address,
+          key: process.env.Google_Map_API,
+        },
+      }
+    );
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error in Geocoding API:", error.message);
+    res.status(500).json({ error: "Geocoding request failed" });
+  }
+});
 
 
 const PORT = process.env.PORT || 5000;

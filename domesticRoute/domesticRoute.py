@@ -6,7 +6,7 @@ from flask_cors import CORS # type: ignore
 # Create your dataset
 data = pd.DataFrame({
     'source': ['Mumbai', 'Mumbai', 'Delhi', 'Delhi', 'Delhi'],
-    'destination': ['Delhi', 'Chennai', 'Leh Ladakh', 'Mumbai', 'Leh Ladakh'],
+    'destination': ['Delhi', 'Chennai', 'Shimla', 'Mumbai', 'Shimla'],
     'mode_of_transportation': ['Air', 'Road', 'Air', 'Air', 'Road'],
     'weight': [10, 20, 10, 10, 30],
     'cost': [10000, 5000, 15000, 9000, 12000],

@@ -1,0 +1,635 @@
+import React, { useState } from "react";
+import {
+  GoogleMap,
+  LoadScript,
+  Polyline,
+  Marker,
+} from "@react-google-maps/api";
+import "./App.css";
+
+// Replace with your actual API key
+const GOOGLE_MAPS_API_KEY = "AIzaSyAmyeWi4SPcXM7dkR1hduoIqL5uyMXtqUk";
+
+// Polyline decoder function for Google's encoded polyline format
+function decodePolyline(encoded) {
+  if (!encoded) {
+    return [];
+  }
+
+  const poly = [];
+  let index = 0,
+    lat = 0,
+    lng = 0;
+
+  while (index < encoded.length) {
+    let b,
+      shift = 0,
+      result = 0;
+
+    do {
+      b = encoded.charCodeAt(index++) - 63;
+      result |= (b & 0x1f) << shift;
+      shift += 5;
+    } while (b >= 0x20);
+
+    const dlat = result & 1 ? ~(result >> 1) : result >> 1;
+    lat += dlat;
+
+    shift = 0;
+    result = 0;
+
+    do {
+      b = encoded.charCodeAt(index++) - 63;
+      result |= (b & 0x1f) << shift;
+      shift += 5;
+    } while (b >= 0x20);
+
+    const dlng = result & 1 ? ~(result >> 1) : result >> 1;
+    lng += dlng;
+
+    poly.push({
+      lat: lat / 1e5,
+      lng: lng / 1e5,
+    });
+  }
+
+  return poly;
+}
+
+function App() {
+  const [origin, setOrigin] = useState("");
+  const [destination, setDestination] = useState("");
+  const [directions, setDirections] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [routePath, setRoutePath] = useState([]);
+  const [mapBounds, setMapBounds] = useState(null);
+  const [startPoint, setStartPoint] = useState(null);
+  const [endPoint, setEndPoint] = useState(null);
+
+  const mapContainerStyle = {
+    width: "100%",
+    height: "500px",
+    marginTop: "20px",
+    borderRadius: "8px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+  };
+
+  const center = {
+    lat: 20.5937, // Center of India as default
+    lng: 78.9629,
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!origin || !destination) {
+      setError("Please enter both origin and destination");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Call your backend API
+      const apiUrl = "http://localhost:5000/api/directions";
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ origin, destination }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to fetch directions");
+      }
+
+      const data = await response.json();
+      setDirections(data);
+
+      // Now fetch polyline data directly from the Google Routes API
+      await fetchRoutePolyline();
+    } catch (err) {
+      setError(err.message);
+      console.error("Error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchRoutePolyline = async () => {
+    try {
+      // First, get coordinates for origin and destination from backend
+      const geocodeOrigin = await fetch(
+        `http://localhost:5000/api/geocode?address=${encodeURIComponent(
+          origin
+        )}`
+      );
+      const originData = await geocodeOrigin.json();
+
+      const geocodeDest = await fetch(
+        `http://localhost:5000/api/geocode?address=${encodeURIComponent(
+          destination
+        )}`
+      );
+      const destData = await geocodeDest.json();
+
+      if (originData.status !== "OK" || destData.status !== "OK") {
+        throw new Error("Failed to geocode addresses");
+      }
+
+      const originLocation = originData.results[0].geometry.location;
+      const destLocation = destData.results[0].geometry.location;
+
+      // Set start and end points for markers
+      setStartPoint({
+        lat: originLocation.lat,
+        lng: originLocation.lng,
+      });
+
+      setEndPoint({
+        lat: destLocation.lat,
+        lng: destLocation.lng,
+      });
+
+      // Make direct request to Google Routes API to get polyline
+      const requestBody = {
+        origin: {
+          location: {
+            latLng: {
+              latitude: originLocation.lat,
+              longitude: originLocation.lng,
+            },
+          },
+        },
+        destination: {
+          location: {
+            latLng: {
+              latitude: destLocation.lat,
+              longitude: destLocation.lng,
+            },
+          },
+        },
+        travelMode: "DRIVE",
+        routingPreference: "TRAFFIC_AWARE",
+        computeAlternativeRoutes: false,
+        routeModifiers: {
+          avoidTolls: false,
+          avoidHighways: false,
+          avoidFerries: false,
+        },
+        languageCode: "en-US",
+        units: "IMPERIAL",
+      };
+
+      const routesResponse = await fetch(
+        "http://localhost:5000/api/route-proxy",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        }
+      );
+
+      if (!routesResponse.ok) {
+        throw new Error("Failed to fetch route polyline");
+      }
+
+      const routesData = await routesResponse.json();
+
+      if (
+        routesData.routes &&
+        routesData.routes.length > 0 &&
+        routesData.routes[0].polyline
+      ) {
+        const decodedPath = decodePolyline(
+          routesData.routes[0].polyline.encodedPolyline
+        );
+        setRoutePath(decodedPath);
+
+        // Calculate bounds for the map
+        if (decodedPath.length > 0) {
+          let bounds = {
+            north: -90,
+            south: 90,
+            east: -180,
+            west: 180,
+          };
+
+          decodedPath.forEach((point) => {
+            bounds.north = Math.max(bounds.north, point.lat);
+            bounds.south = Math.min(bounds.south, point.lat);
+            bounds.east = Math.max(bounds.east, point.lng);
+            bounds.west = Math.min(bounds.west, point.lng);
+          });
+
+          // Add some padding
+          bounds.north += 0.05;
+          bounds.south -= 0.05;
+          bounds.east += 0.05;
+          bounds.west -= 0.05;
+
+          setMapBounds(bounds);
+        }
+      } else {
+        throw new Error("No route data found");
+      }
+    } catch (err) {
+      console.error("Error fetching route polyline:", err);
+      setError("Failed to display route on map: " + err.message);
+    }
+  };
+
+  // Format instructions to handle HTML content safely
+  const formatInstructions = (instruction) => {
+    if (typeof instruction === "string") {
+      return instruction;
+    } else if (instruction && instruction.instructions) {
+      return instruction.instructions;
+    }
+    return "";
+  };
+
+  const onMapLoad = (map) => {
+    if (mapBounds) {
+      map.fitBounds(mapBounds);
+    }
+  };
+
+  return (
+    <div className="app-container">
+      <h1>Route Direction Finder</h1>
+
+      <form onSubmit={handleSubmit} className="route-form">
+        <div className="input-group">
+          <label htmlFor="origin">Starting Point:</label>
+          <input
+            type="text"
+            id="origin"
+            value={origin}
+            onChange={(e) => setOrigin(e.target.value)}
+            placeholder="Enter starting location (e.g., Pune)"
+            required
+          />
+        </div>
+
+        <div className="input-group">
+          <label htmlFor="destination">Destination:</label>
+          <input
+            type="text"
+            id="destination"
+            value={destination}
+            onChange={(e) => setDestination(e.target.value)}
+            placeholder="Enter destination (e.g., Chennai)"
+            required
+          />
+        </div>
+
+        <div className="button-group">
+          <button type="submit" disabled={loading}>
+            {loading ? "Finding Route..." : "Get Directions"}
+          </button>
+        </div>
+      </form>
+
+      {error && (
+        <div className="error">
+          <p>
+            <strong>Error:</strong> {error}
+          </p>
+          <p>
+            Please check your API key and ensure the Routes API is enabled in
+            your Google Cloud Console.
+          </p>
+        </div>
+      )}
+
+      {/* Google Maps Container */}
+      <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY}>
+        <GoogleMap
+          mapContainerStyle={mapContainerStyle}
+          center={center}
+          zoom={5}
+          onLoad={onMapLoad}
+        >
+          {/* Display the route path using Polyline */}
+          {routePath.length > 0 && (
+            <Polyline
+              path={routePath}
+              options={{
+                strokeColor: "#2196F3",
+                strokeOpacity: 0.75,
+                strokeWeight: 5,
+              }}
+            />
+          )}
+
+          {/* Display markers for start and end points */}
+          {startPoint && (
+            <Marker position={startPoint} label="A" title={origin} />
+          )}
+
+          {endPoint && (
+            <Marker position={endPoint} label="B" title={destination} />
+          )}
+        </GoogleMap>
+      </LoadScript>
+
+      {directions && (
+        <div className="directions-container">
+          <h2>
+            {origin && destination
+              ? `Directions from ${origin} to ${destination}`
+              : "Route Directions"}
+          </h2>
+
+          <div className="summary">
+            <p>
+              <strong>Distance:</strong> {directions.distance}
+            </p>
+            <p>
+              <strong>Duration:</strong> {directions.duration}
+            </p>
+          </div>
+
+          <div className="steps">
+            <h3>Steps:</h3>
+            <ol className="steps-list">
+              {directions.steps.map((step, index) => (
+                <li key={index} className="step-item">
+                  <div className="step-info">
+                    <span className="step-instruction">
+                      {formatInstructions(step.instruction)}
+                    </span>
+                    {step.distance && (
+                      <span className="step-distance">{step.distance}</span>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;
+
+const express = require("express");
+const axios = require("axios");
+const dotenv = require("dotenv");
+const path = require("path");
+const cors = require("cors");
+
+// Load environment variables
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 5000;
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "client/build")));
+
+// Geocoding function
+async function geocodeAddress(address) {
+  try {
+    const response = await axios.get(
+      "https://maps.googleapis.com/maps/api/geocode/json",
+      {
+        params: {
+          address: address,
+          key: "AIzaSyAmyeWi4SPcXM7dkR1hduoIqL5uyMXtqUk",
+        },
+      }
+    );
+
+    if (response.data.status === "OK" && response.data.results.length > 0) {
+      const location = response.data.results[0].geometry.location;
+      return {
+        latitude: location.lat,
+        longitude: location.lng,
+      };
+    } else {
+      throw new Error(`Geocoding failed for address: ${address}`);
+    }
+  } catch (error) {
+    console.error("Geocoding error:", error);
+    throw error;
+  }
+}
+
+// Parse polyline to extract route steps
+function parsePolyline(encodedPolyline) {
+  // This is a simplified implementation
+  // In a real app, you would use a library to decode the polyline and extract meaningful steps
+  return [
+    { instruction: "Start your journey", distance: "Start" },
+    { instruction: "Follow the route", distance: "Continue" },
+    { instruction: "Arrive at your destination", distance: "End" },
+  ];
+}
+
+// New Routes API endpoint
+app.post("/api/directions", async (req, res) => {
+  try {
+    const { origin, destination } = req.body;
+
+    if (!origin || !destination) {
+      return res
+        .status(400)
+        .json({ error: "Origin and destination are required" });
+    }
+
+    // Geocode both addresses to get coordinates
+    const originCoords = await geocodeAddress(origin);
+    const destCoords = await geocodeAddress(destination);
+
+    // Prepare request for Routes API
+    const routesApiUrl =
+      "https://routes.googleapis.com/directions/v2:computeRoutes";
+
+    const requestData = {
+      origin: {
+        location: {
+          latLng: {
+            latitude: originCoords.latitude,
+            longitude: originCoords.longitude,
+          },
+        },
+      },
+      destination: {
+        location: {
+          latLng: {
+            latitude: destCoords.latitude,
+            longitude: destCoords.longitude,
+          },
+        },
+      },
+      travelMode: "DRIVE",
+      routingPreference: "TRAFFIC_AWARE",
+      computeAlternativeRoutes: false,
+      routeModifiers: {
+        avoidTolls: false,
+        avoidHighways: false,
+        avoidFerries: false,
+      },
+      languageCode: "en-US",
+      units: "IMPERIAL",
+    };
+
+    const headers = {
+      "Content-Type": "application/json",
+      "X-Goog-Api-Key": process.env.GOOGLE_MAPS_API_KEY,
+      "X-Goog-FieldMask":
+        "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline,routes.legs",
+    };
+
+    console.log("Sending request to Routes API...");
+    const response = await axios.post(routesApiUrl, requestData, { headers });
+
+    // Check if we have a valid response with routes
+    if (
+      !response.data ||
+      !response.data.routes ||
+      response.data.routes.length === 0
+    ) {
+      throw new Error("No routes found");
+    }
+
+    const route = response.data.routes[0];
+
+    // Convert distance from meters to miles or kilometers
+    const distanceInMeters = route.distanceMeters;
+    const distanceInMiles = (distanceInMeters / 1609.34).toFixed(1);
+
+    // Convert duration from seconds to a readable format
+    const durationInSeconds = parseInt(route.duration.replace("s", ""));
+    const hours = Math.floor(durationInSeconds / 3600);
+    const minutes = Math.floor((durationInSeconds % 3600) / 60);
+    const durationStr =
+      hours > 0 ? `${hours} hr ${minutes} min` : `${minutes} min`;
+
+    // Generate steps from the encoded polyline
+    // In a production app, you would want to extract detailed navigation instructions
+    // from the legs.steps data if available
+    const steps =
+      route.legs && route.legs[0].steps
+        ? route.legs[0].steps.map((step) => ({
+            instruction: step.navigationInstruction || "Follow the route",
+            distance: `${(step.distanceMeters / 1609.34).toFixed(1)} mi`,
+          }))
+        : parsePolyline(route.polyline.encodedPolyline);
+
+    // Format the response
+    const directions = {
+      distance: `${distanceInMiles} mi`,
+      duration: durationStr,
+      steps: steps,
+    };
+
+    console.log("Successfully fetched directions");
+    res.json(directions);
+  } catch (error) {
+    console.error("Error fetching directions:", error.message);
+    if (error.response) {
+      console.error("API Response:", error.response.data);
+    }
+    res.status(500).json({ error: "Failed to fetch directions" });
+  }
+});
+
+// Serve React app in production
+if (process.env.NODE_ENV === "production") {
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client/build", "index.html"));
+  });
+}
+
+// Add this endpoint to your existing server.js file
+
+// Route Proxy API endpoint
+app.post("/api/route-proxy", async (req, res) => {
+  try {
+    const requestData = req.body;
+
+    // Validate request data
+    if (!requestData.origin || !requestData.destination) {
+      return res
+        .status(400)
+        .json({ error: "Origin and destination are required" });
+    }
+
+    // Make request to Google Routes API
+    const routesApiUrl =
+      "https://routes.googleapis.com/directions/v2:computeRoutes";
+
+    const headers = {
+      "Content-Type": "application/json",
+      "X-Goog-Api-Key": process.env.GOOGLE_MAPS_API_KEY,
+      "X-Goog-FieldMask":
+        "routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline",
+    };
+
+    console.log("Sending request to Routes API via proxy...");
+    const response = await axios.post(routesApiUrl, requestData, { headers });
+
+    // Return the response
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error in route proxy:", error.message);
+    if (error.response) {
+      console.error("API Response:", error.response.data);
+    }
+    res.status(500).json({ error: "Failed to fetch route data" });
+  }
+});
+
+// Add the geocoding endpoint if it doesn't exist yet
+app.get("/api/geocode", async (req, res) => {
+  try {
+    const { address } = req.query;
+
+    if (!address) {
+      return res.status(400).json({ error: "Address is required" });
+    }
+
+    console.log(`Geocoding address: ${address}`);
+
+    const response = await axios.get(
+      "https://maps.googleapis.com/maps/api/geocode/json",
+      {
+        params: {
+          address,
+          key: process.env.GOOGLE_MAPS_API_KEY,
+        },
+      }
+    );
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error in Geocoding API:", error.message);
+    res.status(500).json({ error: "Geocoding request failed" });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+  console.log(
+    `API Key length: ${
+      process.env.GOOGLE_MAPS_API_KEY
+        ? process.env.GOOGLE_MAPS_API_KEY.length
+        : "Not set"
+    }`
+  );
+});
+
+
